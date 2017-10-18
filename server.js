@@ -11,21 +11,6 @@ app.use(bodyParser.urlencoded({ extended: true })) //parses HTML forms
   app.set('port', process.env.PORT || 3000)
   app.locals.title = 'Quantified Self'
 
-//app.get('/', function(req, res) {
-  //database('meals').innerJoin('meal_foods', 'meals.id', 'meal_foods.meal_id')
-    //.innerJoin('foods', 'foods.id', 'meal_foods.food_id')
-    //.select([
-        //'meals.id AS mealId',
-        //'meals.name AS mealName',
-        //database.raw('ARRAY_AGG(foods.name)'
-     //)])
-    //.groupBy('meals.id', 'meals.name')
-      //.then((data) => {
-      //res.json(data.rows)
-        //process.exit()
-        //})
-//})
-
   app.get('/api/v1/foods', function(req, res) {
     database.raw('SELECT * FROM foods ORDER BY id')
       .then((data) => {
@@ -34,6 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true })) //parses HTML forms
       })
   })
 
+//returns 404 if not found
 app.get('/api/v1/foods/:id', function(req, res) {
   database.raw('SELECT * FROM foods WHERE id=?', [req.params.id])
     .then((data) => {
@@ -42,6 +28,7 @@ app.get('/api/v1/foods/:id', function(req, res) {
     })
 })
 
+//returns 400 if not sucessful, both name and calories are required fields
 app.post('/api/v1/foods', function(req, res) {
   database.raw('INSERT INTO foods (name, calories, created_at, updated_at) VALUES (?, ?, ?, ?)',
       [req.param('name'), req.param('calories'), new Date, new Date])
@@ -54,20 +41,21 @@ app.post('/api/v1/foods', function(req, res) {
   })
 })
 
-app.patch('/api/v1/foods/:id', function(req, res) {
+//this technically says patch in the spec
+//if not sucessful 400 is returned
+app.put('/api/v1/foods/:id', function(req, res) {
   debugger
     let name = req.query.name
     let calories = req.query.calories
     let id = req.params.id
-    console.log(req.query.name)
-    console.log(req.query.calories)
-    console.log(req.params.id)
+    let attrs = [name, calories, new Date, id]
 
-    //database.raw('UPDATE foods SET ? = ?, ? = ? WHERE id = ?')
+    database.raw('UPDATE foods SET name = ?, calories = ? updated_at = ? WHERE id = ?', attrs)
   //{ food: { name: "Name of Food", calories: "Calories here" } }
   //if not sucessful a 300 status code will be returned
 })
 
+//404 if food not found
 app.delete('/api/v1/foods/:id', function(req, res) {
   database.raw('DELETE FROM foods WHERE id=?', [req.params.id])
     .then(() => {
@@ -79,6 +67,38 @@ app.delete('/api/v1/foods/:id', function(req, res) {
   })
 })
 
+//not outputting foods
+app.get('/api/v1/meals', function(req, res) {
+  //need to fix
+    database.raw('SELECT * FROM meals ORDER BY id')
+      .then((data) => {
+        res.json(data.rows)
+          process.exit()
+      })
+  })
+
+//not outputing foods
+//if meal isn't found returns 404
+app.get('/api/v1/meals/:meal_id/foods', function(req, res) {
+  console.log(req.params.meal_id)
+  database.raw('SELECT * FROM meals WHERE id=?', [req.params.meal_id])
+    .then((data) => {
+      res.json(data.rows)
+        process.exit()
+    })
+})
+
+//if cannot be found returns 404
+app.post('/api/v1/meals/:meal_id/foods/:id', function(req, res) {
+  console.log(req.params.meal_id)
+  console.log(req.params.id)
+})
+
+//if cannot be found returns 404
+app.delete('/api/v1/meals/:meal_id/foods/:id'), function(req, res) {
+  console.log(req.params.meal_id)
+  console.log(req.params.id)
+})
 
 
 if (!module.parent) {
