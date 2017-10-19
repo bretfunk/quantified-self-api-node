@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: true })) //parses HTML forms
     database.raw('SELECT * FROM foods ORDER BY id')
       .then((data) => {
         res.json(data.rows)
-          process.exit()
+          //process.exit()
       })
   })
 
@@ -37,7 +37,7 @@ app.post('/api/v1/foods', function(req, res) {
     })
   .then((data) => {
     res.json(data.rows)
-    process.exit()
+      //process.exit()
   })
 })
 
@@ -51,8 +51,8 @@ app.put('/api/v1/foods/:id', function(req, res) {
     let attrs = [name, calories, new Date, id]
 
     database.raw('UPDATE foods SET name = ?, calories = ? updated_at = ? WHERE id = ?', attrs)
-  //{ food: { name: "Name of Food", calories: "Calories here" } }
-  //if not sucessful a 300 status code will be returned
+    //{ food: { name: "Name of Food", calories: "Calories here" } }
+    //if not sucessful a 300 status code will be returned
 })
 
 //404 if food not found
@@ -63,28 +63,45 @@ app.delete('/api/v1/foods/:id', function(req, res) {
     })
   .then((data) => {
     res.json(data.rows)
-    process.exit()
+      //process.exit()
   })
 })
 
 //not outputting foods
 app.get('/api/v1/meals', function(req, res) {
   //need to fix
-    database.raw('SELECT * FROM meals ORDER BY id')
+  //database.raw('SELECT * FROM meals ORDER BY id')
+  //database.raw(`SELECT meals.*, foods.* FROM meals
+  //INNER JOIN meal_foods ON meals.id = meal_foods.meal_id
+  //INNER JOIN foods ON meal_foods.food_id = foods.id
+  //GROUP BY meals.id, foods.id ORDER BY meals.id
+  //`)
+  database.raw(`SELECT * FROM meals`)
+    .then((data) => {
+      let id = data.rows[4].id
+      database.raw(`SELECT foods.id, foods.name, foods.calories FROM foods
+          INNER JOIN meal_foods ON foods.id = meal_foods.food_id
+          INNER JOIN meals ON meals.id = meal_foods.meal_id
+          WHERE meals.id = ?`, [id])
+    })
       .then((data) => {
         res.json(data.rows)
-          process.exit()
+      //   res.json(data.rows)
+          //process.exit()
       })
-  })
+})
 
 //not outputing foods
 //if meal isn't found returns 404
 app.get('/api/v1/meals/:meal_id/foods', function(req, res) {
   console.log(req.params.meal_id)
-  database.raw('SELECT * FROM meals WHERE id=?', [req.params.meal_id])
+  //database.raw('SELECT * FROM meals WHERE id=?', [req.params.meal_id])
+  database.raw(`SELECT * FROM meals
+      INNER JOIN meal_foods ON meals.id = meal_foods.meal_id
+      INNER JOIN foods ON meal_foods.food_id = foods.id WHERE meals.id=?`, [req.params.meal_id])
     .then((data) => {
       res.json(data.rows)
-        process.exit()
+        //process.exit()
     })
 })
 
@@ -95,7 +112,7 @@ app.post('/api/v1/meals/:meal_id/foods/:id', function(req, res) {
 })
 
 //if cannot be found returns 404
-app.delete('/api/v1/meals/:meal_id/foods/:id'), function(req, res) {
+app.delete('/api/v1/meals/:meal_id/foods/:id', function(req, res) {
   console.log(req.params.meal_id)
   console.log(req.params.id)
 })
