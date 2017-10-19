@@ -1,23 +1,23 @@
 let express = require('express')
 let app = express()
-  let bodyParser = require('body-parser')
-  const environment = process.env.NODE_ENV || 'development'
-  const configuration = require('./knexfile')[environment]
-  const database = require('knex')(configuration)
+let bodyParser = require('body-parser')
+const environment = process.env.NODE_ENV || 'development'
+const configuration = require('./knexfile')[environment]
+const database = require('knex')(configuration)
 
-  app.use(bodyParser.json()) //parses JSON
+app.use(bodyParser.json()) //parses JSON
 app.use(bodyParser.urlencoded({ extended: true })) //parses HTML forms
 
-  app.set('port', process.env.PORT || 3000)
-  app.locals.title = 'Quantified Self'
+app.set('port', process.env.PORT || 3000)
+app.locals.title = 'Quantified Self'
 
-  app.get('/api/v1/foods', function(req, res) {
-    database.raw('SELECT * FROM foods ORDER BY id')
-      .then((data) => {
-        res.json(data.rows)
-          //process.exit()
-      })
-  })
+app.get('/api/v1/foods', function(req, res) {
+  database.raw('SELECT * FROM foods ORDER BY id')
+    .then((data) => {
+      res.json(data.rows)
+        //process.exit()
+    })
+})
 
 //returns 404 if not found
 app.get('/api/v1/foods/:id', function(req, res) {
@@ -44,7 +44,6 @@ app.post('/api/v1/foods', function(req, res) {
 //this technically says patch in the spec
 //if not sucessful 400 is returned
 app.put('/api/v1/foods/:id', function(req, res) {
-  debugger
     let name = req.query.name
     let calories = req.query.calories
     let id = req.params.id
@@ -91,11 +90,30 @@ app.get('/api/v1/meals', function(req, res) {
       })
 })
 
+app.get('/api/v1/meals/:meal_id', function(req, res) {
+  let mealId = req.params.meal_id
+  meal = {foods: []}
+  database.raw(`SELECT id, name FROM meals WHERE id = ?`, [mealId])
+    .then((data) => {
+      meal.id = data.rows[0].id
+      meal.name = data.rows[0].name
+      return database.raw(`SELECT f.id, f.name, f.calories FROM foods f
+                    INNER JOIN meal_foods mf ON mf.food_id = f.id
+                    WHERE mf.meal_id = ?`, [mealId])
+    })
+    .then((data) => {
+      meal.foods = data.rows
+    })
+    .then(() => {
+      res.status(200).json(meal)
+    })
+})
+
 //not outputing foods
 //if meal isn't found returns 404
 app.get('/api/v1/meals/:meal_id/foods', function(req, res) {
   console.log(req.params.meal_id)
-  //database.raw('SELECT * FROM meals WHERE id=?', [req.params.meal_id])
+  //(data)base.raw('SELECT * FROM meals WHERE id=?', [req.params.meal_id])
   database.raw(`SELECT * FROM meals
       INNER JOIN meal_foods ON meals.id = meal_foods.meal_id
       INNER JOIN foods ON meal_foods.food_id = foods.id WHERE meals.id=?`, [req.params.meal_id])
@@ -107,14 +125,32 @@ app.get('/api/v1/meals/:meal_id/foods', function(req, res) {
 
 //if cannot be found returns 404
 app.post('/api/v1/meals/:meal_id/foods/:id', function(req, res) {
-  console.log(req.params.meal_id)
-  console.log(req.params.id)
+  let mealId = req.params.meal_id
+  let foodId = req.params.id
+  let created_at = new Date
+  let updated_at = new Date
+  database.raw(`INSERT INTO meal_foods (meal_id, food_id, created_at, updated_at)
+                VALUES (?, ?, ?, ?)`, [mealId, foodId, created_at, updated_at])
+    .then((data) => {
+      res.status(201).json({ message: "Successfully added food to meal"})
+    })
+    .catch(() => {
+      res.status(404).json({ message: "Cannot find requested meal and/or food to add food to specified meal"})
+    })
 })
 
 //if cannot be found returns 404
 app.delete('/api/v1/meals/:meal_id/foods/:id', function(req, res) {
-  console.log(req.params.meal_id)
-  console.log(req.params.id)
+  let mealId = req.params.meal_id
+  let foodId = req.params.id
+  database.raw(`DELETE FROM meal_foods
+                WHERE meal_id = ? AND food_id = ?`, [mealId, foodId])
+    .then((data) => {
+      res.status(200).json({ message: "Successfully removed food to meal"})
+    })
+    .catch(() => {
+      res.status(404).json({ message: "Cannot find requested meal and/or food to delete"})
+    })
 })
 
 
