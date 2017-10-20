@@ -1,5 +1,5 @@
 exports.seed = function(knex, Promise) {
-  return knex.raw('TRUNCATE meal_foods RESTART IDENTITY; TRUNCATE meals RESTART IDENTITY; TRUNCATE foods RESTART IDENTITY')
+  return knex.raw('DELETE FROM meal_foods; DELETE FROM meals; DELETE FROM foods')
     .then(() => {
       return Promise.all([
         knex.raw(`INSERT INTO foods(name, calories, created_at, updated_at)
