@@ -35,37 +35,37 @@ exports.seed = function(knex, Promise) {
         knex.raw(`INSERT INTO meals(name, created_at, updated_at)
                   VALUES (?, ?, ?)`, ["Snack", new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [1, 1, new Date, new Date]),
+                  VALUES (?, ?, ?, ?)`, [8, 1, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [4, 1, new Date, new Date]),
+                  VALUES (?, ?, ?, ?)`, [9, 1, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [11, 1, new Date, new Date]),
+                  VALUES (?, ?, ?, ?)`, [10, 1, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [6, 1, new Date, new Date]),
+                  VALUES (?, ?, ?, ?)`, [6, 2, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [9, 2, new Date, new Date]),
+                  VALUES (?, ?, ?, ?)`, [11, 2, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [4, 2, new Date, new Date]),
+                  VALUES (?, ?, ?, ?)`, [12, 2, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [2, 2, new Date, new Date]),
+                  VALUES (?, ?, ?, ?)`, [1, 3, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [9, 2, new Date, new Date]),
-        knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [4, 3, new Date, new Date]),
-        knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [2, 3, new Date, new Date]),
+                  VALUES (?, ?, ?, ?)`, [1, 3, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
                   VALUES (?, ?, ?, ?)`, [9, 3, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [3, 3, new Date, new Date]),
+                  VALUES (?, ?, ?, ?)`, [1, 4, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [12, 4, new Date, new Date]),
+                  VALUES (?, ?, ?, ?)`, [1, 4, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [7, 4, new Date, new Date]),
-        knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [9, 4, new Date, new Date]),
-        knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [10, 4, new Date, new Date])
+                  VALUES (?, ?, ?, ?)`, [5, 4, new Date, new Date]),
+        //knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
+                  //VALUES (?, ?, ?, ?)`, [12, 4, new Date, new Date]),
+        //knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
+                  //VALUES (?, ?, ?, ?)`, [7, 4, new Date, new Date]),
+        //knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
+                  //VALUES (?, ?, ?, ?)`, [9, 4, new Date, new Date]),
+        //knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
+                  //VALUES (?, ?, ?, ?)`, [10, 4, new Date, new Date])
 
       ])
     })
