@@ -8,7 +8,7 @@ exports.up = function(knex, Promise) {
     updated_at TIMESTAMP
   )`
 
-  knex.raw(createMealFoodsTable)
+ return knex.raw(createMealFoodsTable)
 }
 
 exports.down = function(knex, Promise) {

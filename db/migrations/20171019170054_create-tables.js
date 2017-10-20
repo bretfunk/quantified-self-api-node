@@ -8,11 +8,11 @@ exports.up = (knex, Promise) => {
     updated_at TIMESTAMP
   )`
 
-  knex.raw(createFoodsTable)
+  return knex.raw(createFoodsTable)
 }
 
 exports.down = (knex, Promise) => {
   let dropFoodsTable = 'DROP TABLE foods'
 
-  knex.raw(dropFoodsTable)
+  return knex.raw(dropFoodsTable)
 }
