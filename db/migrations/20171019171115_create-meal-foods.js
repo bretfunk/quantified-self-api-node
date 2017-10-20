@@ -14,5 +14,5 @@ exports.up = function(knex, Promise) {
 exports.down = function(knex, Promise) {
   let dropMealFoodsTable = 'DROP TABLE meal_foods'
 
-  knex.raw(dropMealFoodsTable)
+  return knex.raw(dropMealFoodsTable)
 }
