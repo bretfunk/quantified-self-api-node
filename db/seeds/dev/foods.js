@@ -57,7 +57,7 @@ exports.seed = function(knex, Promise) {
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
                   VALUES (?, ?, ?, ?)`, [9, 3, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
-                  VALUES (?, ?, ?, ?)`, [3, 3, new Date, new Date])
+                  VALUES (?, ?, ?, ?)`, [3, 3, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
                   VALUES (?, ?, ?, ?)`, [12, 4, new Date, new Date]),
         knex.raw(`INSERT INTO meal_foods(food_id, meal_id, created_at, updated_at)
