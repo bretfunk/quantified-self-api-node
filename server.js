@@ -1,10 +1,21 @@
-let express = require('express')
-let app = express()
-let bodyParser = require('body-parser')
-let FoodsController = require('./lib/controllers/foods-controller')
-let MealsController = require('./lib/controllers/meals_controller')
-let MealFoodsController = require('./lib/controllers/meal-foods-controller')
+const express = require('express')
+const app = express()
+const bodyParser = require('body-parser')
+const FoodsController = require('./lib/controllers/foods-controller')
+const MealsController = require('./lib/controllers/meals_controller')
+const MealFoodsController = require('./lib/controllers/meal-foods-controller')
+const cors = require('cors')
 
+app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+    if (req.method === 'OPTIONS') {
+        res.send(200);
+    } else {
+        next();
+    }
+})
 app.use(bodyParser.json()) //parses JSON
 app.use(bodyParser.urlencoded({ extended: true })) //parses HTML forms
 
