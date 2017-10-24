@@ -28,7 +28,7 @@ app.get('/api/v1/foods/:id', FoodsController.show)
 
 app.post('/api/v1/foods', FoodsController.create)
 
-app.put('/api/v1/foods/:id', FoodsController.update)
+app.patch('/api/v1/foods/:id', FoodsController.update)
 
 app.delete('/api/v1/foods/:id', FoodsController.destroy)
 
